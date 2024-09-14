@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import socket  # For internet connection check
+import socket 
 from groq import Groq
 from scholarly import scholarly
 from prompts import get_research_prompt, get_guidance_prompt, invalid_question_prompt
