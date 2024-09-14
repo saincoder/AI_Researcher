@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import socket 
+import socket
 from groq import Groq
 from scholarly import scholarly
 from prompts import get_research_prompt, get_guidance_prompt, invalid_question_prompt
@@ -145,8 +145,9 @@ def get_research_papers_from_scholar(topic, fields):
 
 # Function to simulate AI researcher's response
 def get_researcher_response(question, fields):
+    subfields = ", ".join(fields)
     chat_completion = client.chat.completions.create(
-        messages=[get_research_prompt(question, ", ".join(fields))],
+        messages=[get_research_prompt(question, subfields)],
         model="llama3-groq-70b-8192-tool-use-preview",
     )
     answer = chat_completion.choices[0].message.content
@@ -154,7 +155,7 @@ def get_researcher_response(question, fields):
     if "non-research" in answer.lower():
         return invalid_question_prompt(), None
 
-    guidance = get_guidance_prompt(question, ", ".join(fields))
+    guidance = get_guidance_prompt(question, subfields)
     
     return answer, guidance
 

@@ -4,22 +4,34 @@ def get_research_prompt(question, field):
     return {
         "role": "user",
         "content": f"""
-        The user is asking a question related to the field '{field}'.
-        Is this question research-related? If it is, explain the topic '{question}' clearly,
-        focusing on important concepts, recent advancements, and potential research directions.
-        If the question is not related to research, reply that the question doesn't fit the research criteria
-        and suggest research-related topics.
+        The user is asking a research-related question in the field of '{field}'. Please provide a comprehensive answer to the question '{question}'.
+        
+        Additionally, include the following guidance:
+        - A suggested approach to perform a literature review.
+        - Potential open challenges or unresolved questions in this field.
+        - The most suitable methods or frameworks to address the research problem.
+        - Peer-reviewed sources or journals to consult.
+        - Next steps to further explore the topic, including objectives, methodology, and potential tools or datasets.
+
+        Make sure the response is structured and concise.
         """
     }
 
+
+
 def get_guidance_prompt(question, field):
     return f"""
-    To help you explore the research question '{question}' in the field of '{field}', I suggest starting
-    with a broad literature review. Identify key papers and influential research in this area. 
-    Then, explore open challenges or gaps that your question might address. 
-    Focus on gathering sources that are peer-reviewed and relevant to your specific research interest. 
-    Formulate experiments or approaches to investigate the research problem.
+    Here’s a suggested approach to explore the research question '{question}' in the field of '{field}':
+
+    - **Literature Review**: Start by identifying key papers, influential researchers, and recent advancements in the field.
+    - **Open Challenges**: Look for gaps or unresolved questions in existing research that align with your query.
+    - **Peer-Reviewed Sources**: Focus on gathering peer-reviewed papers, conference publications, and reputable journals.
+    - **Approach and Methods**: Consider the most suitable experimental methods or theoretical frameworks to address the research problem.
+    - **Next Steps**: Define a research plan, including objectives, methodology, and potential datasets or tools.
+
+    This structured approach will guide you in navigating and contributing to the existing body of knowledge.
     """
+
 
 def invalid_question_prompt():
     return """
