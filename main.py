@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import socket
+import socket 
 from groq import Groq
 from scholarly import scholarly
 from prompts import get_research_prompt, get_guidance_prompt, invalid_question_prompt
@@ -158,6 +158,7 @@ def get_researcher_response(question, fields):
     guidance = get_guidance_prompt(question, subfields)
     
     return answer, guidance
+
 
 # Submit button with enhanced styling
 if st.button("Submit"):
