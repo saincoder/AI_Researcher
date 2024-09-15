@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import socket 
+import socket
 from groq import Groq
 from scholarly import scholarly
 from prompts import get_research_prompt, get_guidance_prompt, invalid_question_prompt
@@ -9,8 +9,8 @@ from prompts import get_research_prompt, get_guidance_prompt, invalid_question_p
 # Load environment variables from .env file
 load_dotenv()
 
-# Set up Groq client
-api_key = os.getenv("GROQ_API_KEY")
+# Set up Groq client using st.secrets for secure API key handling
+api_key = st.secrets["GROQ_API_KEY"]
 if not api_key:
     st.error("GROQ_API_KEY not found. Please check your environment variables.")
 else:
@@ -19,7 +19,6 @@ else:
 # Function to check internet connection
 def is_connected():
     try:
-        # Check if host is reachable
         socket.create_connection(("www.google.com", 80))
         return True
     except OSError:
@@ -66,20 +65,10 @@ st.markdown("""
         color: #c24838;
         margin-bottom: 10px;
     }
-    .field-checkbox {
-        margin-bottom: 10px;
-    }
     .research-field {
         font-weight: bold;
         color: #c24838;
         font-size: 14px;
-    }
-    .alert-box {
-        padding: 15px;
-        margin-bottom: 20px;
-        color: #c24838;
-        background-color: #ffbaba;
-        border-radius: 5px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -158,7 +147,6 @@ def get_researcher_response(question, fields):
     guidance = get_guidance_prompt(question, subfields)
     
     return answer, guidance
-
 
 # Submit button with enhanced styling
 if st.button("Submit"):
