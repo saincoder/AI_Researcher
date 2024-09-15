@@ -6,7 +6,7 @@ from groq import Groq
 from scholarly import scholarly
 from prompts import get_research_prompt, get_guidance_prompt, invalid_question_prompt
 
-# Load environment variables from .env file
+# Load environment variables from (.env) file
 load_dotenv()
 
 # Set up Groq client using st.secrets for secure API key handling
