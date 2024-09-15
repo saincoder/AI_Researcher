@@ -35,7 +35,6 @@ st.markdown("""
         font-family: 'Arial', sans-serif;
     }
     .stButton button {
-        color: white;
         border-radius: 10px;
         padding: 10px 20px;
     }
@@ -51,7 +50,6 @@ st.markdown("""
     }
     .subtitle-style {
         font-size: 18px;
-        color: #f0f0f0;
         text-align: center;
         margin-bottom: 20px;
     }
@@ -127,7 +125,7 @@ def get_research_papers_from_scholar(topic, fields):
     papers = []
     for field in fields:
         search_query = scholarly.search_pubs(f"{topic} {field}")
-        for i in range(3):  # Get top 3 results for each field
+        for i in range(5):  # Get top 5 results for each field
             try:
                 paper = next(search_query)
                 title = paper['bib']['title']
