@@ -5,6 +5,7 @@ import socket
 from groq import Groq
 from scholarly import scholarly
 from prompts import get_research_prompt, get_guidance_prompt, invalid_question_prompt
+import datetime
 
 # Load environment variables from (.env) file
 load_dotenv()
@@ -109,23 +110,41 @@ for subfield in fields_dict[broad_field]:
 st.markdown("<div class='research-field'>Research Question</div>", unsafe_allow_html=True)
 research_question = st.text_input("", "", help="Enter a clear research-related question")
 
+# Year range inputs
+start_year = st.number_input("Start Year", min_value=1900, max_value=datetime.datetime.now().year, value=2020)
+end_year = st.number_input("End Year", min_value=1900, max_value=datetime.datetime.now().year, value=2023)
+
+# Ensure end_year is not before start_year
+if end_year < start_year:
+    st.warning("End year must be greater than or equal to start year.")
+    end_year = start_year
+
 # Function to get research papers from Google Scholar
-def get_research_papers_from_scholar(topic, fields):
+def get_research_papers_from_scholar(topic, fields, start_year, end_year):
     papers = []
     for field in fields:
         search_query = scholarly.search_pubs(f"{topic} {field}")
         for i in range(5):  # Get top 5 results for each field
             try:
                 paper = next(search_query)
-                title = paper['bib']['title']
-                abstract = paper.get('bib', {}).get('abstract', "No abstract available")
-                url = paper.get('pub_url', "No URL available")
-                papers.append({
-                    "title": title,
-                    "abstract": abstract,
-                    "url": url,
-                    "field": field
-                })
+                publication_year = paper['bib'].get('pub_year', 'Unknown')
+
+                try:
+                    publication_year = int(publication_year)
+                except ValueError:
+                    publication_year = 9999
+
+                if start_year <= publication_year <= end_year:
+                    title = paper['bib']['title']
+                    abstract = paper.get('bib', {}).get('abstract', "No abstract available")
+                    url = paper.get('pub_url', "No URL available")
+                    papers.append({
+                        "title": title,
+                        "abstract": abstract,
+                        "url": url,
+                        "field": field,
+                        "publication_year": publication_year
+                    })
             except StopIteration:
                 break
     return papers
@@ -164,10 +183,11 @@ if st.button("Submit"):
                 
                 with tab2:
                     st.write("### Suggested Research Papers:")
-                    scholar_papers = get_research_papers_from_scholar(research_question, selected_subfields)
+                    scholar_papers = get_research_papers_from_scholar(research_question, selected_subfields, start_year, end_year)
                     if scholar_papers:
                         for i, paper in enumerate(scholar_papers):
                             with st.expander(f"📄 Paper {i+1}: {paper['title']} ({paper['field']})"):
+                                st.write(f"**Publication Year**: {paper['publication_year']}")
                                 st.write(f"**Abstract**: {paper['abstract']}")
                                 st.write(f"[Read Full Paper]({paper['url']})")
                     else:
