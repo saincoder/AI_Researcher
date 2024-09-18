@@ -75,7 +75,7 @@ Feel free to fork this project and submit a pull request if you'd like to contri
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [LICENSE](LICENSE).
 
 ---
 
